@@ -17,10 +17,11 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   flex:1;
-  background-color: ${({ theme }) => theme.bg};
+  background-color: ${({ theme }) => theme.bgLighter};
   height:100vh;
   color:${({ theme }) => theme.text};
   font-size:14px;
@@ -79,19 +80,21 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 
-function Menu({darkMode , setDarkMode}) {
+function Menu({ darkMode, setDarkMode }) {
   return (
     <Container>
-        <Wrapper>
-            <Logo>
-                <Img src={logo}/>
-                Youtube
-            </Logo>
-            <Item>
-              <HomeIcon/>
-              Home
-            </Item>
-            <Item>
+      <Wrapper>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <Logo>
+            <Img src={logo} />
+            Youtube
+          </Logo>
+        </Link>
+        <Item>
+          <HomeIcon />
+          Home
+        </Item>
+        <Item>
           <ExploreOutlinedIcon />
           Explore
         </Item>
@@ -99,7 +102,7 @@ function Menu({darkMode , setDarkMode}) {
           <SubscriptionsOutlinedIcon />
           Subscriptions
         </Item>
-        <Hr/>
+        <Hr />
         <Item>
           <VideoLibraryOutlinedIcon />
           Library
@@ -108,14 +111,14 @@ function Menu({darkMode , setDarkMode}) {
           <HistoryOutlinedIcon />
           History
         </Item>
-        <Hr/>
+        <Hr />
         <Login>
           Sign in to like videos, comment, and subscribe.
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-        </Login> 
+          <Button>
+            <AccountCircleOutlinedIcon />
+            SIGN IN
+          </Button>
+        </Login>
         <Hr />
         <Title>BEST OF YOUTUBE</Title>
         <Item>
@@ -142,7 +145,7 @@ function Menu({darkMode , setDarkMode}) {
           <LiveTvOutlinedIcon />
           Live
         </Item>
-        <Hr/>
+        <Hr />
         <Item>
           <SettingsOutlinedIcon />
           Settings
@@ -159,7 +162,7 @@ function Menu({darkMode , setDarkMode}) {
           <SettingsBrightnessOutlinedIcon />
           {darkMode ? "Light" : "Dark"} Mode
         </Item>
-        </Wrapper>
+      </Wrapper>
     </Container>
   )
 }

@@ -52,17 +52,17 @@ const Info = styled.div`
 `;
 
 
-function Card() {
+function Card({type}) {
     const link= "https://www.theverge.com/_next/image?url=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FAsCb7hsaezVAhJdYuTuGYsCkODU%3D%2F0x0%3A2040x1360%2F2000x1333%2Ffilters%3Afocal(1020x680%3A1021x681)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_asset%2Ffile%2F10581501%2Fwjoel_1777_180403_youtube_003.jpg&w=750&q=75"
 
     const logo ="https://cdn2.hubspot.net/hubfs/521324/youtube%20icon.png"
 
   return (
     <Link to="/video/test" style={{textDecoration:"none"}}>
-    <Container>
-        <Image src={link}/>
-        <Details>
-            <ChannelImage src={logo}/>
+    <Container type={type}>
+        <Image type={type} src={link}/>
+        <Details type={type}>
+            <ChannelImage type={type} src={logo}/>
             <Texts>
                 <Title>Test Video</Title>
                 <ChannelName> Rahul Tech </ChannelName>

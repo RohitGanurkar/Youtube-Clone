@@ -1,6 +1,8 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import {format} from "timeago.js"
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
@@ -52,10 +54,20 @@ const Info = styled.div`
 `;
 
 
-function Card({type}) {
+function Card({type , video}) {
     const link= "https://www.theverge.com/_next/image?url=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FAsCb7hsaezVAhJdYuTuGYsCkODU%3D%2F0x0%3A2040x1360%2F2000x1333%2Ffilters%3Afocal(1020x680%3A1021x681)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_asset%2Ffile%2F10581501%2Fwjoel_1777_180403_youtube_003.jpg&w=750&q=75"
 
     const logo ="https://cdn2.hubspot.net/hubfs/521324/youtube%20icon.png"
+
+    const [user, setUser] = useState({})
+
+  useEffect(()=>{
+    const fetchUser = async ()=>{
+      const res = await axios.get(`http://localhost:8800/api/users/find/${video.userId}`);
+      setUser(res.data);
+    }
+    fetchUser();
+  },[video.userId])
 
   return (
     <Link to="/video/test" style={{textDecoration:"none"}}>
@@ -64,9 +76,9 @@ function Card({type}) {
         <Details type={type}>
             <ChannelImage type={type} src={logo}/>
             <Texts>
-                <Title>Test Video</Title>
-                <ChannelName> Rahul Tech </ChannelName>
-                <Info>660.990 videws • 1 day ago</Info>
+                <Title>{video.title}</Title>
+                <ChannelName>{user.name} </ChannelName>
+                <Info>{video.views} videws • {format(video.createdAt)}</Info>
             </Texts>
         </Details>
     </Container>

@@ -13,6 +13,6 @@ const CommentSchema = new mongoose.Schema({
         type:String,
         required:true
     }
-},{timesstamp:true});
+},{timestamps:true});
 
 export default mongoose.model("Comment",CommentSchema);

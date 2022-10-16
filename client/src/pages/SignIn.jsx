@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
-
+import { auth , provider } from "../firebase"
+import { signInWithPopup } from 'firebase/auth'
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -72,6 +74,7 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const handleLogin = async(e)=>{
     e.preventDefault();
@@ -79,9 +82,28 @@ const SignIn = () => {
     try {
       const res = await axios.post("http://localhost:8800/api/auth/signin",{name,password},{withCredentials:true});
       dispatch(loginSuccess(res.data))
+      navigate("/")
     } catch (error) {
       dispatch(loginFailure())
     }
+  }
+
+  const signInWithGoogle = (e) =>{
+    dispatch(loginStart())
+    signInWithPopup(auth , provider)
+    .then((result)=>{
+      axios.post("http://localhost:8800/api/auth/google" , {
+        name:result.user.displayName,
+        email:result.user.email,
+        img:result.user.photoURL,
+      } , {withCredentials:true}).then((res)=>{
+        dispatch(loginSuccess(res.data))
+        navigate("/")
+      })
+    })
+    .catch((err)=>{
+      dispatch(loginFailure())
+    })
   }
 
   return (
@@ -93,6 +115,7 @@ const SignIn = () => {
         <Input type="password" placeholder="password" onChange={(e)=>setPassword(e.target.value)} />
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
+        <Button onClick={signInWithGoogle}>Signin with Google</Button>
         <Input placeholder="username" onChange={(e)=>setName(e.target.value)} />
         <Input placeholder="email" onChange={(e)=>setEmail(e.target.value)}  />
         <Input type="password" placeholder="password" onChange={(e)=>setPassword(e.target.value)}  />

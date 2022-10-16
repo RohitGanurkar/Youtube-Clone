@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import {format} from "timeago.js"
+import TimeAgo from 'timeago-react';
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
@@ -78,7 +78,10 @@ function Card({type , video}) {
             <Texts>
                 <Title>{video.title}</Title>
                 <ChannelName>{user.name} </ChannelName>
-                <Info>{video.views} videws • {format(video.createdAt)}</Info>
+                <Info>{video.views} videws •<TimeAgo
+                                              datetime={video.createdAt}
+                                              locale='ind'
+                                            /></Info>
             </Texts>
         </Details>
     </Container>

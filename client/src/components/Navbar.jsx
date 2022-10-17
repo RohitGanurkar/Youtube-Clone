@@ -89,7 +89,9 @@ const Navbar = () => {
         </Search>
         {currentUser ? (
           <User>
-            <VideoCallOutlinedIcon />
+            <Button>
+              <VideoCallOutlinedIcon />
+            </Button>
             <Avatar  src={currentUser.img} />
             {currentUser.name}
             <Button onClick={logoutUser}>

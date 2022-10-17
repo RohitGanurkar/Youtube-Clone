@@ -1,5 +1,7 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import TimeAgo from "timeago-react";
 
 const Container = styled.div`
   display: flex;
@@ -35,19 +37,28 @@ const Text = styled.span`
   font-size: 14px;
 `;
 
-function Comment() {
+function Comment({comment}) {
+  const [channel, setChannel] = useState({});
+  useEffect(() => {
+    const fetchData = async() =>{
+      const channelRes = await axios.get(
+        `http://localhost:8800/api/users/find/${comment.userId}`
+      );
+      setChannel(channelRes.data);
+    }
+    fetchData()
+  }, [comment.useId])
+  
+  
   return (
     <Container>
-      <Avatar src="https://cdn2.hubspot.net/hubfs/521324/youtube%20icon.png" />
+      <Avatar src={channel.img}/>
       <Details>
         <Name>
-          John Doe <Date>1 day ago</Date>
+          {channel.name}<Date><TimeAgo datetime={comment.createdAt} locale='ind'/></Date>
         </Name>
         <Text>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel, ex
-          laboriosam ipsam aliquam voluptatem perferendis provident modi, sequi
-          tempore reiciendis quod, optio ullam cumque? Quidem numquam sint
-          mollitia totam reiciendis?
+          {comment.desc}
         </Text>
       </Details>
     </Container>

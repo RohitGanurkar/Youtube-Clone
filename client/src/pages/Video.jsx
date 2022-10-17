@@ -28,7 +28,7 @@ const Content = styled.div`
 const VideoWrapper = styled.div``;
 
 const Title = styled.h1`
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 400;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -100,7 +100,8 @@ const ChannelCounter = styled.span`
 `;
 
 const Description = styled.p`
-  font-size: 14px;
+  font-size: 18px;
+  font-weight:400
 `;
 
 const Subscribe = styled.button`
@@ -113,6 +114,13 @@ const Subscribe = styled.button`
   padding: 10px 20px;
   cursor: pointer;
 `;
+
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
+`;
+
 
 function Video() {
   const { currentUser } = useSelector((state) => state.user);
@@ -165,15 +173,7 @@ function Video() {
     <Container>
       <Content>
         <VideoWrapper>
-          <iframe
-            width="100%"
-            height="720"
-            src="https://www.youtube.com/embed/k3Vfj-e1Ma4"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+        <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
         <Details>
@@ -217,7 +217,7 @@ function Video() {
           </Subscribe>
         </Channel>
         <Hr />
-        <Comments/>
+        <Comments videoId={currentVideo._id}/>
       </Content>
       {/* <Recommendation>
         <Card type="sm"/>

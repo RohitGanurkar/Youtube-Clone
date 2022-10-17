@@ -1,4 +1,6 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Comment from "./Comment";
 
@@ -26,20 +28,34 @@ const Input = styled.input`
   width: 100%;
 `;
 
-function Comments() {
+function Comments({videoId}) {
+  
+
+  const { currentUser } = useSelector((state) => state.user);
+
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8800/api/comments/${videoId}`,{withCredentials:true});
+        setComments(res.data);
+      } catch (err) {
+        
+      }
+    };
+    fetchComments();
+  }, [videoId]);
+
   return (
     <Container>
       <NewComment>
-        <Avatar src="https://cdn2.hubspot.net/hubfs/521324/youtube%20icon.png" />
+        <Avatar src={currentUser.img} />
         <Input placeholder="Add a comment..." />
       </NewComment>
-      <Comment/>
-      <Comment/>
-      <Comment/>
-      <Comment/>
-      <Comment/>
-      <Comment/>
-      <Comment/>
+      {comments.map((comment)=>{
+        return <Comment key={comment._id} comment={comment}/>
+      })}
     </Container>
   )
 }

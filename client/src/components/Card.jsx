@@ -13,8 +13,8 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100%;
-  height: ${(props) => (props.type === "sm" ? "120px" : "202px")};
+  width: ${(props) => (props.type === "sm" ? "300px" : "100%")};
+  height: ${(props) => (props.type === "sm" ? "150px" : "202px")};
   background-color: #999;
   flex: 1;
 `;
@@ -55,10 +55,7 @@ const Info = styled.div`
 
 
 function Card({type , video}) {
-    const link= "https://www.theverge.com/_next/image?url=https%3A%2F%2Fcdn.vox-cdn.com%2Fthumbor%2FAsCb7hsaezVAhJdYuTuGYsCkODU%3D%2F0x0%3A2040x1360%2F2000x1333%2Ffilters%3Afocal(1020x680%3A1021x681)%2Fcdn.vox-cdn.com%2Fuploads%2Fchorus_asset%2Ffile%2F10581501%2Fwjoel_1777_180403_youtube_003.jpg&w=750&q=75"
-
-    const logo ="https://cdn2.hubspot.net/hubfs/521324/youtube%20icon.png"
-
+  
     const [user, setUser] = useState({})
 
   useEffect(()=>{
@@ -72,13 +69,13 @@ function Card({type , video}) {
   return (
     <Link to= {`/video/${video._id}`} style={{textDecoration:"none"}}>
     <Container type={type}>
-        <Image type={type} src={link}/>
+        <Image type={type} src={video.imgUrl}/>
         <Details type={type}>
-            <ChannelImage type={type} src={logo}/>
+            <ChannelImage type={type} src={user.img}/>
             <Texts>
                 <Title>{video.title}</Title>
                 <ChannelName>{user.name} </ChannelName>
-                <Info>{video.views} videws •<TimeAgo
+                <Info>{video.views} views •<TimeAgo
                                               datetime={video.createdAt}
                                               locale='ind'
                                             /></Info>

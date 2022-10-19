@@ -15,10 +15,10 @@ const Home = ({type}) => {
   const [videos, setVideos] = useState([])
 
   useEffect(()=>{
+    console.log = console.warn = console.error = () => {}; 
     const fetchVideos = async ()=>{
       const res = await axios.get(`http://localhost:8800/api/videos/${type}`,{withCredentials:true});
       setVideos(res.data);
-      console.log(res);
     }
     fetchVideos();
   },[type])

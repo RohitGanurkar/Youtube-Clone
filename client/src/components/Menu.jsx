@@ -163,10 +163,11 @@ function Menu({ darkMode, setDarkMode }) {
           <ArticleOutlinedIcon />
           News
         </Item>
-        <Item>
+        <Link to={'/myvideos'} style={{ textDecoration: "none", color: "inherit" }}><Item>
           <LiveTvOutlinedIcon />
-          Live
+          Myvideos
         </Item>
+        </Link>
         <Hr />
         <Item>
           <SettingsOutlinedIcon />

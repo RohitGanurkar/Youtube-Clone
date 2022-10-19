@@ -13,7 +13,6 @@ function Recommendation({tags}) {
       const fetchVideos = async ()=>{
         const res = await axios.get(`http://localhost:8800/api/videos/tags?tags=${tags}`,{withCredentials:true});
         setVideos(res.data);
-        console.log(res);
       }
       fetchVideos();
     },[tags])

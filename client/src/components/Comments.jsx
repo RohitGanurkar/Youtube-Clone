@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import SendIcon from '@mui/icons-material/Send';
 import Comment from "./Comment";
 
 const Container = styled.div``;
@@ -28,12 +29,23 @@ const Input = styled.input`
   width: 100%;
 `;
 
+const Button = styled.button`
+ 
+`;
+
 function Comments({videoId}) {
   
 
   const { currentUser } = useSelector((state) => state.user);
 
   const [comments, setComments] = useState([]);
+
+  const [commentInput, setSommentInput] = useState("")
+
+  const addComment =async() =>{
+    const res = await axios.post("http://localhost:8800/api/comments", {desc:commentInput,videoId:videoId} , {withCredentials:true})
+    setSommentInput("")
+  }
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -45,13 +57,14 @@ function Comments({videoId}) {
       }
     };
     fetchComments();
-  }, [videoId]);
+  }, [videoId , addComment]);
 
   return (
     <Container>
       <NewComment>
         <Avatar src={currentUser.img} />
-        <Input placeholder="Add a comment..." />
+        <Input placeholder="Add a comment..." value={commentInput} onChange={e=>setSommentInput(e.target.value)}/>
+        <Button onClick={addComment}><SendIcon/></Button>
       </NewComment>
       {comments.map((comment)=>{
         return <Comment key={comment._id} comment={comment}/>

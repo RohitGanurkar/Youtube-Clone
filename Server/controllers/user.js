@@ -46,6 +46,17 @@ export const getUser = async (req, res, next) => {
   }
 };
 
+
+// For Get info of a Single User
+export const getUserVideo = async (req, res, next) => {
+  try {
+    const user = await Video.find({userId:req.params.userId});
+    res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // For subscribtion and Incress Subscribers
 export const subscribe = async (req, res, next) => {
   try {

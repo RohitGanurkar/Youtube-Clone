@@ -1,6 +1,6 @@
 import express from "express" ;
 const router = express.Router();
-import { deleteUser, dislike, getUser, like, subscribe, unsubscribe, update } from "../controllers/user.js";
+import { deleteUser, dislike, getUser, getUserVideo, like, subscribe, unsubscribe, update } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js"
 
 router.put('/:id', verifyToken , update)
@@ -10,6 +10,9 @@ router.delete('/:id', verifyToken,deleteUser)
 
 
 router.get('/find/:id', getUser)
+
+
+router.get('/video/:userId', getUserVideo)
 
 
 router.put('/sub/:id',verifyToken, subscribe)

@@ -1,11 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import TimeAgo from 'timeago-react';
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import TimeAgo from "timeago-react";
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
+  padding-top: ${(props) => props.type === "delete" && "10px"};
   margin-bottom: ${(props) => (props.type === "sm" ? "10px" : "45px")};
   cursor: pointer;
   display: ${(props) => props.type === "sm" && "flex"};
@@ -53,37 +56,61 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
+const Div = styled.div`
+  padding-top:3px;
+  height: 25px;
+  cursor: pointer;
+  color: red;
+`;
 
-function Card({type , video}) {
-  
-    const [user, setUser] = useState({})
+function Card({ type, video, deleteVideo }) {
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
+  const { currentUser } = useSelector((state) => state.user);
 
-  useEffect(()=>{
-    const fetchUser = async ()=>{
-      const res = await axios.get(`http://localhost:8800/api/users/find/${video.userId}`);
-      setUser(res.data);
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/signin");
     }
+    const fetchUser = async () => {
+      const res = await axios.get(
+        `http://localhost:8800/api/users/find/${video.userId}`
+      );
+      setUser(res.data);
+    };
+
     fetchUser();
-  },[video.userId])
+  }, [video.userId , currentUser , navigate]);
 
   return (
-    <Link to= {`/video/${video._id}`} style={{textDecoration:"none"}}>
-    <Container type={type}>
-        <Image type={type} src={video.imgUrl}/>
-        <Details type={type}>
-            <ChannelImage type={type} src={user.img}/>
+    <>
+      <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
+        <Container type={type}>
+          <Image type={type} src={video.imgUrl} />
+          <Details type={type}>
+            <ChannelImage type={type} src={user.img} />
             <Texts>
-                <Title>{video.title}</Title>
-                <ChannelName>{user.name} </ChannelName>
-                <Info>{video.views} views •<TimeAgo
-                                              datetime={video.createdAt}
-                                              locale='ind'
-                                            /></Info>
+              <Title>{video.title}</Title>
+              <ChannelName>{user.name} </ChannelName>
+              <Info>
+                {video.views} views •{" "}
+                <TimeAgo datetime={video.createdAt} locale="ind" />
+              </Info>
             </Texts>
-        </Details>
-    </Container>
-    </Link>
-  )
+          </Details>
+        </Container>
+      </Link>
+      {type === "delete" && (
+        <Div
+          onClick={() => {
+            deleteVideo(video._id);
+          }}
+        >
+          <HighlightOffIcon />
+        </Div>
+      )}
+    </>
+  );
 }
 
-export default Card
+export default Card;

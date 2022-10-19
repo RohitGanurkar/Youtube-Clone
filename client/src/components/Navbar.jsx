@@ -84,6 +84,7 @@ const Navbar = () => {
 
   const logoutUser = () =>{
     dispatch(logout())
+    navigate('/signin')
   }
 
   return (

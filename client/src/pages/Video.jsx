@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../components/Comments";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,11 +15,10 @@ import TimeAgo from "timeago-react";
 import { subscription } from "../redux/userSlice";
 import Recommendation from "../components/Recommendation.jsx";
 
-
 const Container = styled.div`
   display: flex;
   gap: 24px;
-  padding:25px
+  padding: 25px;
 `;
 
 const Content = styled.div`
@@ -97,7 +97,7 @@ const ChannelCounter = styled.span`
 
 const Description = styled.p`
   font-size: 18px;
-  font-weight:400
+  font-weight: 400;
 `;
 
 const Subscribe = styled.button`
@@ -117,7 +117,6 @@ const VideoFrame = styled.video`
   object-fit: cover;
 `;
 
-
 function Video() {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
@@ -126,42 +125,65 @@ function Video() {
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
 
+  const increase = async () => {
+    await axios.put(
+      `http://localhost:8800/api/videos/view/${currentVideo._id}`,
+      {},
+      { withCredentials: true }
+    );
+  };
+
+  useEffect(() => {
+    increase();
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const videoRes = await axios.get(`http://localhost:8800/api/videos/find/${path}`);
+        const videoRes = await axios.get(
+          `http://localhost:8800/api/videos/find/${path}`
+        );
         const channelRes = await axios.get(
           `http://localhost:8800/api/users/find/${videoRes.data.userId}`
         );
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     };
     fetchData();
   }, [path, dispatch]);
 
-
-  const handleLike = async() =>{
+  const handleLike = async () => {
     await axios.put(
-      `http://localhost:8800/api/users/like/${currentVideo._id}` , {},
-      {withCredentials:true}
+      `http://localhost:8800/api/users/like/${currentVideo._id}`,
+      {},
+      { withCredentials: true }
     );
     dispatch(like(currentUser._id));
-  }
-  const handleDisike = async() =>{
+  };
+  const handleDisike = async () => {
     await axios.put(
-      `http://localhost:8800/api/users/dislike/${currentVideo._id}` , {},
-      {withCredentials:true}
+      `http://localhost:8800/api/users/dislike/${currentVideo._id}`,
+      {},
+      { withCredentials: true }
     );
-    dispatch(dislike(currentUser._id))
-  }
+    dispatch(dislike(currentUser._id));
+  };
 
   const handleSub = async () => {
     currentUser.subscribedUsers.includes(channel._id)
-      ? await axios.put(`http://localhost:8800/api/users/unsub/${channel._id}`,{},{withCredentials:true})
-      : await axios.put(`http://localhost:8800/api/users/sub/${channel._id}`,{},{withCredentials:true});
+      ? await axios.put(
+          `http://localhost:8800/api/users/unsub/${channel._id}`,
+          {},
+          { withCredentials: true }
+        )
+      : await axios.put(
+          `http://localhost:8800/api/users/sub/${channel._id}`,
+          {},
+          { withCredentials: true }
+        );
     dispatch(subscription(channel._id));
   };
 
@@ -169,22 +191,30 @@ function Video() {
     <Container>
       <Content>
         <VideoWrapper>
-        <VideoFrame src={currentVideo.videoUrl} controls />
+          <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
         <Details>
-          <Info>{currentVideo.views} views • <TimeAgo
-                                              datetime={currentVideo.createdAt}
-                                              locale='ind'
-                                            /></Info>
+          <Info>
+            {currentVideo.views} views •{" "}
+            <TimeAgo datetime={currentVideo.createdAt} locale="ind" />
+          </Info>
           <Buttons>
             <Button onClick={handleLike}>
-              {currentVideo.likes?.includes(currentUser._id) ? <ThumbUpIcon/> : <ThumbUpOutlinedIcon />} 
-               {currentVideo.likes?.length}  Likes
+              {currentVideo.likes?.includes(currentUser._id) ? (
+                <ThumbUpIcon />
+              ) : (
+                <ThumbUpOutlinedIcon />
+              )}
+              {currentVideo.likes?.length} Likes
             </Button>
             <Button onClick={handleDisike}>
-            {currentVideo.dislikes?.includes(currentUser._id) ? <ThumbDownIcon/> : <ThumbUpOutlinedIcon />} 
-            {currentVideo.dislikes?.length}  Dislike
+              {currentVideo.dislikes?.includes(currentUser._id) ? (
+                <ThumbDownIcon />
+              ) : (
+                <ThumbDownOffAltIcon />
+              )}
+              {currentVideo.dislikes?.length} Dislike
             </Button>
             <Button>
               <ReplyOutlinedIcon /> Share
@@ -201,9 +231,7 @@ function Video() {
             <ChannelDetail>
               <ChannelName>{channel.name}</ChannelName>
               <ChannelCounter>{channel.subscribers}</ChannelCounter>
-              <Description>
-                {currentVideo.desc}
-              </Description>
+              <Description>{currentVideo.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe onClick={handleSub}>
@@ -213,11 +241,11 @@ function Video() {
           </Subscribe>
         </Channel>
         <Hr />
-        <Comments videoId={currentVideo._id}/>
+        <Comments videoId={currentVideo._id} />
       </Content>
-      <Recommendation tags={currentVideo.tags}/>
+      <Recommendation tags={currentVideo.tags} />
     </Container>
-  )
+  );
 }
 
-export default Video
+export default Video;

@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/userSlice";
 import Upload from "./Upload.jsx";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   position: sticky;
@@ -84,6 +85,10 @@ const Navbar = () => {
 
   const logoutUser = () =>{
     dispatch(logout())
+    toast.success("Logout Successfull",{
+      toastId: 1215612,
+      autoClose: 1000,
+    })
     navigate('/signin')
   }
 

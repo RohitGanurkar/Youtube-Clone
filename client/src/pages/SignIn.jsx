@@ -12,6 +12,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { toast } from 'react-toastify';
 
 
 const Container = styled.div`
@@ -99,6 +100,10 @@ const SignIn = () => {
     try {
       const res = await axios.post("http://localhost:8800/api/auth/signin",{name,password},{withCredentials:true});
       dispatch(loginSuccess(res.data))
+      toast.success("Login Successfull",{
+        toastId: 1215612,
+        autoClose: 2000,
+      })
       navigate("/")
     } catch (error) {
       dispatch(loginFailure())
@@ -115,6 +120,10 @@ const SignIn = () => {
         img:result.user.photoURL,
       } , {withCredentials:true}).then((res)=>{
         dispatch(loginSuccess(res.data))
+        toast.success("Login Successfull",{
+          toastId: 1215612,
+          autoClose: 2000,
+        })
         navigate("/")
       })
     })
@@ -172,11 +181,24 @@ const SignIn = () => {
           password:"",
           img:""
         })
+        toast.success("You are Ragister Successfull",{
+          toastId: 1215612,
+          autoClose: 2000,
+        })
       }else{
-        alert("Somthing went Wrond")
+        
+      toast.error("Something went Wrond",{
+        toastId: 1215612,
+        autoClose: 2000,
+      })
       }
     } catch (error) {
-
+      
+      toast.error("Try with Another Name",{
+        toastId: 1215612,
+        
+        autoClose: 4000,
+      })
     }
   }
 

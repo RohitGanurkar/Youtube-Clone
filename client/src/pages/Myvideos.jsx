@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import Card from "../components/Card";
 
@@ -17,6 +18,10 @@ const Myvideos = () => {
   const deleteVideo = async(videoId) =>{
     const res = await axios.delete(`http://localhost:8800/api/videos/${videoId}`,{withCredentials:true});
     console.log(res)
+    toast.success("Deleted Successfull",{
+      toastId: 1215612,
+      autoClose: 2000,
+    })
   }
 
   useEffect(() => {

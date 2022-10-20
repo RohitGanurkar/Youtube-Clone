@@ -57,7 +57,7 @@ function Comments({videoId}) {
       }
     };
     fetchComments();
-  }, [videoId , addComment]);
+  }, [videoId ,comments]);
 
   return (
     <Container>
